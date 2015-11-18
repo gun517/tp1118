@@ -9,6 +9,12 @@ class TimelineController < ApplicationController
     def wolf
         @blogs = Blog.all.reverse
     end
+    
+    def follow_gather
+        @user = User.all
+        @blogs = Blog.all.reverse
+    end
+
     def write
         Blog.create(user_id: current_user.id, content: params[:naeyong])
         redirect_to :root
@@ -74,6 +80,24 @@ class TimelineController < ApplicationController
             redirect_to :root
         end        
     end
+    
+    
+    def follow
+        @followexist = Follower.where(useremail: params[:bloguseremail])
+        if params[:bloguseremail] == current_user.email then
+        redirect_to :root
+        elsif  @followexist.exists?(user_id: current_user.id) == 'true'  then
+        redirect_to :root        
+        else
+        Following.create(useremail: current_user.email, user_id: params[:followuserid])
+        Follower.create(useremail: params[:followuseremail], user_id: current_user.id)
+        redirect_to :root
+        end
+    end
+    
+    
+    
+    
     def blog
         @pp = Blog.find(params[:id])
     end

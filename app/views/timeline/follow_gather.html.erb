@@ -1,4 +1,16 @@
 <h2>Timeline</h2>
+
+    <% @Follow = Following.where(useremail: current_user.email)%>
+
+내가 팔로우 하는 사람:
+    <% @user.each do |a| %>
+        <% if @Follow.exists?(user_id: a.id) == true %>
+            <%=a.email%>
+        <% end %>
+    <% end %>
+
+
+
 <%=form_tag '/write', method: 'post' do %>
     <div class = "form-group">
         <textarea name="naeyong" class="form-control" rows="3"></textarea>
@@ -9,6 +21,9 @@
 <% end %>
 <ul>
     <% @blogs.each do |b| %>
+
+        <% if @Follow.exists?(user_id: b.user.id) == true %>
+    
         <li><%=b.user.email%> :</li>
         <div class = "well">
             <%= truncate(b.content, length:250) %>
@@ -79,4 +94,7 @@
             <% end %>
         <% end %>
     <% end %>
+    
+    <% end %>
+    
 </ul>

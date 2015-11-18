@@ -9,4 +9,6 @@ class User < ActiveRecord::Base
   has_many :comments
   belongs_to :agreec
   belongs_to :agree
+  belongs_to :follower
+  belongs_to :following
 end
