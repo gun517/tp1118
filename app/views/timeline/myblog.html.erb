@@ -1,0 +1,24 @@
+<h2>My Blog</h2>
+<ul>
+    <% @myblogs.each do |b| %>
+        <li><%=b.user.email%> : <%=b.content%>
+            <a href="/blog_edit?id=<%=b.id%>">수정</a>
+            <a href="/blog_delete?id=<%=b.id%>">삭제</a>
+            
+            <%=form_tag '/comment' do%>
+                <input type="hidden" name="blog_id" value="<%=b.id%>">
+                <input type="text" name="comment">
+                <input type="submit">
+            <% end %>
+            <ol>
+                <% b.comments.each do |c| %>
+                    <li><%=c.user.email%> : <%=c.msg%></li>
+                    <% if current_user.email == c.user.email %>
+                        <a href="/comment_edit?id=<%=c.id%>">수정</a>
+                        <a href="/comment_delete?id=<%=c.id%>">삭제</a>
+                    <% end %>
+                <% end %>
+            </ol>
+        </li>
+    <% end %>
+</ul>

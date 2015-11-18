@@ -1,0 +1,8 @@
+<h1>Comment_edit</h1>
+
+<%=form_tag '/comment_update', method: 'post' do %>
+    <input type="hidden" name="id" value="<%=@comm.id%>">
+    <input type="text" name="comment" value="<%=@comm.msg%>">
+    <input type="submit">
+    <a href="/">취소</a>
+<% end %>

@@ -1,0 +1,9 @@
+<h1>Blog_edit</h1>
+
+<%=form_tag '/blog_update', method: 'post' do %>
+    <input type="hidden" name="id" value="<%=@blog.id%>">
+    <textarea name="naeyong" value="<%=@blog.content%>"></textarea>
+    <input type="submit">
+    <a href="/">취소</a>
+<% end %>
+

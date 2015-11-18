@@ -1,0 +1,71 @@
+<h2>Timeline</h2>
+<%=form_tag '/write', method: 'post' do %>
+    <div class = "form-group">
+        <textarea name="naeyong" class="form-control" rows="3"></textarea>
+    </div>
+    <div class = "form-group">
+        <input type="submit" class="btn btn-success">
+    </div>
+<% end %>
+<ul>
+    <% @blogs.each do |b| %>
+        <% if b.user.is_female == false %>
+            <li><%=b.user.email%> :</li>
+            <div class = "well">
+                <%= truncate(b.content, length:250) %>
+                <a href="/blog?id=<%=b.id%>">더보기</a>
+                <%=form_tag 'agree', class: "form-inline" do%>
+                    <input type="hidden" name="blog_id" value="<%=b.id%>">
+                    <input type="hidden" name="bloguseremail" value="<%=b.user.email%>">
+                    <%if current_user.nil?%>
+                    <%else%>
+                        <input type="hidden" name="userexist" value="<%=b.agrees.exists?(user_id: current_user.id)%>">
+                    <%end%>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-danger" value="공감 <%=b.agrees.count%>">
+                    </div>
+                <% end %>
+            </div>
+            <% if user_signed_in? %>
+                <% if current_user.email == b.user.email %>
+                    <div class = "form-group">
+                        <div class = "col-md-offset-11">
+                            <a href="/blog_edit?id=<%=b.id%>">수정</a>
+                            <a href="/blog_delete?id=<%=b.id%>">삭제</a>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
+            <ol>
+            <% b.comments.each do |c| %>
+                <% if user_signed_in? %>
+                    <% if current_user.email == c.user.email %>
+                        <li>
+                            <div>
+                                <%=c.user.email%> : <%=c.msg%>
+                                    <a href="/comment_edit?id=<%=c.id%>">수정</a>
+                                    <a href="/comment_delete?id=<%=c.id%>">삭제</a>
+                            </div>
+                        </li>
+                    <% end %>
+                <% else %>
+                    <li>
+                        <%=c.user.email%> : <%=c.msg%>
+                    </li>
+                <% end %>
+            <% end %>
+            </ol>
+            <% if b.user.is_female != current_user.is_female || b.user.email == current_user.email %>
+                <%=form_tag '/comment', class: "form-inline" do%>
+                    <input type="hidden" name="blog_id" value="<%=b.id%>">
+                    <div class = "form-group">
+                        <input type="text" name="comment" class="form-control">
+                        <input type="submit" class="btn btn-primary">
+                    </div>
+                <% end %>
+            <% end %>
+        <% end %>
+    <% end %>
+</ul>
+
+
